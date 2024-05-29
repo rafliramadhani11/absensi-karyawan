@@ -1,5 +1,7 @@
+@props(['user'])
+
 <!doctype html>
-<html>
+<html class="h-full bg-gray-100">
 
 <head>
     <meta charset="utf-8">
@@ -8,10 +10,27 @@
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 </head>
 
-<body>
-    <main>
-        {{ $slot }}
-    </main>
+<body class="h-full">
+    <div class="min-h-full">
+
+        {{ $navbar }}
+
+        @if (isset($head))
+            <header class="bg-white shadow">
+                <div class="mx-auto max-w-7xl px-2 py-4 sm:px-6 lg:px-8">
+                    {{ $head }}
+                </div>
+            </header>
+        @endif
+
+        <main>
+            <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+                {{ $slot }}
+            </div>
+        </main>
+    </div>
+
+    @vite('resources/js/app.js')
 </body>
 
 </html>

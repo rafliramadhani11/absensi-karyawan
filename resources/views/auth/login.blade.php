@@ -9,17 +9,15 @@
         </p>
     </div>
 
-    <div class="mt-10 w-full sm:mx-auto sm:w-full sm:max-w-sm">
-        <form action="/submit" method="POST" class="bg-white p-6 rounded-md ">
-            <h2 class="text-center text-xl lg:text-2xl font-bold leading-9 tracking-tight text-gray-900 ">Login
-                Account
-            </h2>
+    <div class="mt-5 w-full sm:mx-auto sm:w-full sm:max-w-sm">
+        <form action="{{ route('login') }}" method="POST" class="bg-white p-6 rounded-md ">
             @csrf
+            <h2 class="text-center text-xl lg:text-2xl font-bold leading-9 tracking-tight text-gray-900 ">Login
+            </h2>
+            <x-input label="Email" name="email" type="email" autocomplete="email" value="{{ old('email') }}" />
+            <x-input label="Password" name="password" type="password" autocomplete="current-password" />
 
-            <x-input label="Email" name="email" type="email" autocomplete="email" required="true" />
-            <x-input label="Password" name="password" type="password" autocomplete="current-password" required="true" />
-
-            <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md">Submit</button>
+            <x-button id="submit" type="submit">Submit</x-button>
         </form>
     </div>
 
