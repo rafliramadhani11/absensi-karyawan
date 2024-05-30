@@ -17,7 +17,7 @@
 
         @if (isset($head))
             <header class="bg-white shadow">
-                <div class="mx-auto max-w-7xl px-2 py-4 sm:px-6 lg:px-8">
+                <div class="mx-auto max-w-7xl px-5 py-4 sm:px-6 lg:px-8 ">
                     {{ $head }}
                 </div>
             </header>

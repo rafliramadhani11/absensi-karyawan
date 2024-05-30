@@ -25,6 +25,8 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'posisi' => fake()->jobTitle(),
+            'alamat' => fake()->address(),
             'email' => fake()->unique()->safeEmail(),
             'admin' => $this->faker->boolean(rand(0, 1)),
 
