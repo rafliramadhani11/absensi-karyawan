@@ -22,9 +22,9 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if ($user->admin == 1) {
-                return redirect()->intended('/dashboard-admin');
+                return redirect()->intended('/data-pegawai');
             } else {
-                return redirect()->intended('/dashboard-user');
+                return redirect()->intended('/data-kehadiran');
             }
         }
 

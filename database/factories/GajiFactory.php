@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Absen>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Gaji>
  */
-class AbsenFactory extends Factory
+class GajiFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,8 @@ class AbsenFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'absen_id' => 1,
+            'gaji' => $this->faker->numberBetween(4000000, 6000000),
         ];
     }
 }

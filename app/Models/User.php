@@ -17,11 +17,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'alamat',
-        'email',
-        'password',
+    protected $guarded = [
+        'id'
     ];
 
     /**
@@ -47,8 +44,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function absens(): HasMany
+    public function hadirs(): HasMany
     {
-        return $this->hasMany(Absen::class);
+        return $this->hasMany(Hadir::class);
     }
 }

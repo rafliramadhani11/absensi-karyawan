@@ -11,15 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absens', function (Blueprint $table) {
+        Schema::create('hadirs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->date('date');
+            $table->date('date')->nullable();
             $table->time('waktu_datang')->nullable();
             $table->time('waktu_pulang')->nullable();
+
+            $table->string('status')->nullable();
+
+            $table->string('alasan')->nullable();
             $table->string('komen')->nullable();
+
             $table->timestamps();
         });
     }
@@ -29,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('absens');
+        Schema::dropIfExists('hadirs');
     }
 };

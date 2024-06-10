@@ -13,12 +13,18 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('kode')->unique();
             $table->string('name');
-            $table->string('posisi');
+            $table->string('slug');
+            $table->enum('jeniskelamin', ['Laki - Laki', 'Perempuan']); // Menggunakan ENUM untuk jenis kelamin
+            $table->enum('jabatan', ['Direktur Utama', 'Manajer Proyek', 'Pengawas Lapangan', 'Kepala Gudang', 'Finance', 'Purchasing', 'Supervisor']); // Menggunakan ENUM untuk jabatan
             $table->string('alamat');
+            $table->date('tanggalLahir');
+
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('admin')->default(0);
+
             $table->rememberToken();
             $table->timestamps();
         });
