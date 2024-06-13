@@ -9,11 +9,6 @@
         </h1>
     </x-slot>
 
-
-    <h1 class="text-xl font-bold tracking-tight px-6 mb-4 text-gray-900">
-        {{ Carbon\Carbon::parse($date)->format('j F Y') }}
-    </h1>
-
     {{-- SESSION UPDATE ABSENSI --}}
     @if (session()->has('updateAbsenPegawai'))
         <div x-data="{ alertIsVisible: true }" x-show="alertIsVisible"
@@ -44,26 +39,35 @@
         </div>
     @endif
 
-    <div class="bg-white rounded-md shadow-md p-6">
+    <div class="bg-white rounded-md shadow-md p-6 col-span-2">
+        <h1 class="text-xl font-bold tracking-tight px-4 mb-4 text-gray-900">
+            {{ Carbon\Carbon::parse($date)->translatedFormat('l, j F Y') }}
+        </h1>
 
-        <div class="overflow-hidden w-full overflow-x-auto rounded-xl ">
+        <div class=" w-full overflow-auto rounded-xl ">
             <table class="w-full text-left text-xs text-slate-700 ">
                 <thead class="border-b border-slate-300 text-sm text-black ">
                     <tr>
                         <th scope="col" class="p-4">Pegawai</th>
                         <th scope="col" class="p-4">Waktu Datang</th>
                         <th scope="col" class="p-4">Waktu Pulang</th>
-                        <th scope="col" class="p-4">Status Kehadiran</th>
+                        <th scope="col" class="p-4">Status</th>
                         <th scope="col" class="p-4"></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-300 ">
+
+                    @if ($hadirs->count() == 0)
+                        <td class="pt-4 font-semibold text-red-500 text-center" colspan="5">Belum ada karyawan yang
+                            absen</td>
+                    @endif
+
                     @foreach ($hadirs as $hadir)
                         <tr>
                             <td class="p-4">
                                 <div class="flex w-max items-center gap-2">
                                     <div class="flex flex-col">
-                                        <span class="text-black ">{{ $hadir->user_name }}</span>
+                                        <span class="text-black ">{{ $hadir->user->name }}</span>
                                     </div>
                                 </div>
                             </td>
@@ -94,7 +98,7 @@
                                 @endif
                             </td>
                             <td class="p-4">
-                                <a href="{{ route('admin.user.absensi.detail', $hadir->user_id) }}"
+                                <a href="{{ route('admin.user.absensi.detail', $hadir->id) }}"
                                     class="cursor-pointer whitespace-nowrap rounded-xl bg-transparent p-0.5 font-semibold text-blue-700 outline-blue-700 hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:opacity-100 active:outline-offset-0 ">Detail</a>
                             </td>
                         </tr>
@@ -104,4 +108,5 @@
         </div>
 
     </div>
+
 </x-app-layout>

@@ -9,6 +9,7 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+
 </head>
 
 <body class="h-full">

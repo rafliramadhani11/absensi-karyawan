@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\Hadir;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -27,15 +26,17 @@ class AdminController extends Controller
     public function absensi()
     {
         $admin = auth()->user();
-        $date = Carbon::now()->format('Y-m-d');
+        $date = Carbon::now();
+        $hadirs = Hadir::with('user')->latest()->paginate(10);
 
-        $hadirs = DB::table('hadirs')
-            ->join('users', 'hadirs.user_id', '=', 'users.id')
-            ->whereDate('hadirs.date', $date)
-            ->select('hadirs.*', 'users.name as user_name')
-            ->orderBy('hadirs.created_at', 'desc')
-            ->latest()->paginate(10);
         return view('auth.admin.absensi', compact('admin', 'hadirs', 'date'));
+    }
+
+    public function qrCode()
+    {
+        $admin = auth()->user();
+        $date = Carbon::now();
+        return view('auth.admin.qrCode', compact('admin', 'date'));
     }
 
     public function userAbsensi(User $user)
@@ -72,16 +73,17 @@ class AdminController extends Controller
         return view('auth.admin.userAbsensi', compact('admin', 'user', 'monthsData'));
     }
 
-    public function detailAbsensi(User $user)
+    public function detailAbsensi(Hadir $hadir)
     {
+
         $admin = auth()->user();
 
-        $date = Carbon::now()->format('Y-m-d');
-        $hadir = Hadir::where('user_id', $user->id)
-            ->whereDate('date', $date)
-            ->first();
+        return view('auth.admin.detailAbsensi', compact('admin',  'hadir'));
+    }
 
-        return view('auth.admin.detailAbsensi', compact('admin', 'user', 'hadir'));
+    public function hadir(Request $request)
+    {
+        return redirect()->back();
     }
 
     public function addKomentar(Request $request, Hadir $hadir)
@@ -95,7 +97,7 @@ class AdminController extends Controller
                 'komen' => $request->komen,
             ]
         );
-        return redirect()->back();
+        return redirect()->back()->with('komentarAdded', 'Komentar akan muncul di data kehadiran karyawan sebagai feedback');
     }
 
     public function ubahAbsen(Request $request, Hadir $hadir)
@@ -133,7 +135,6 @@ class AdminController extends Controller
     public function show(User $user)
     {
         $admin = auth()->user();
-
         return view('auth.admin.show', compact('admin', 'user'));
     }
 

@@ -19,6 +19,10 @@
                             class="{{ Request::is('absensi-pegawai*') ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-900 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium transition duration-200">
                             Absensi Pegawai
                         </a>
+                        <a href="{{ route('admin.qrCodeAbsen') }}"
+                            class="{{ Request::is('qr-code-absen') ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-900 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium transition duration-200">
+                            Qr Code Absen
+                        </a>
                     </div>
                 </div>
             </div>
@@ -95,6 +99,9 @@
             <a href="{{ route('admin.user.absensi') }}"
                 class="{{ Request::is('absensi-pegawai*') ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-900 hover:text-white' }}  block rounded-md px-3 py-2 text-base font-medium transition duration-200"
                 aria-current="page">Absensi Pegawai</a>
+            <a href="{{ route('admin.qrCodeAbsen') }}"
+                class="{{ Request::is('qr-code-absen') ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-900 hover:text-white' }}  block rounded-md px-3 py-2 text-base font-medium transition duration-200"
+                aria-current="page">Qr Code Absen</a>
         </div>
         <div class="border-t border-gray-700 pb-3 pt-4">
             <div class="flex items-center px-5">

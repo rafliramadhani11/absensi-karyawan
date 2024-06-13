@@ -44,6 +44,8 @@
                                 @if ($value['alfaIzinCount'] > 0)
                                     - Rp.
                                     {{ number_format($value['potongan'], 0, ',', '.') }}
+                                @else
+                                    -
                                 @endif
                             </td>
                             <td class="p-4 text-gray-500">
@@ -55,7 +57,6 @@
                                     {{ number_format($value['totalGaji'], 0, ',', '.') }}
                                 @endif
                             </td>
-
                         </tr>
                     @endforeach
                 </tbody>

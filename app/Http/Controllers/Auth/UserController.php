@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Absen;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Hadir;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class UserController extends Controller
 {
@@ -25,6 +25,7 @@ class UserController extends Controller
         $totalHours = $startTime->diffInHours($endTime);
 
         $hadir = Hadir::where('user_id', $user->id)->latest()->first();
+
         $showFormHadir = false;
         $showFormPulang = false;
         $showAlreadyhadirMessage = false;
@@ -48,7 +49,6 @@ class UserController extends Controller
         }
         return view('auth.user.kehadiran', compact('hadir', 'date', 'showFormHadir', 'showFormPulang', 'showAlreadyhadirMessage', 'user', 'hadirs', 'startTime', 'endTime', 'showIzinMessage', 'showAlfaMessage'));
     }
-
     public function izin()
     {
         $user = auth()->user();
@@ -56,7 +56,6 @@ class UserController extends Controller
 
         return view('auth.user.izin', compact('user', 'date'));
     }
-
     public function izinAction(Request $request)
     {
         $user = auth()->user();
@@ -73,9 +72,9 @@ class UserController extends Controller
     }
     public function hadir()
     {
-        $user = Auth::user();
+        $user = auth()->user();
         $date = Carbon::now()->format('Y-m-d');
-        $waktuDatang = Carbon::now()->format('H:i:s');;
+        $waktuDatang = Carbon::now()->format('H:i:s');
         Hadir::updateOrCreate(
             [
                 'user_id' => $user->id,
@@ -88,11 +87,8 @@ class UserController extends Controller
                 'status' => 'Hadir'
             ]
         );
-
-
-        return redirect()->route('user.kehadiran');
+        return redirect()->route('user.kehadiran')->with('succesedAbsen', 'Terimakasih, sudah melakukan absen hari ini, Selamat Pagi !');
     }
-
     public function pulang()
     {
         $user = auth()->user();
@@ -108,9 +104,8 @@ class UserController extends Controller
                 'waktu_pulang' => $waktu_pulang,
             ]
         );
-        return redirect()->route('user.kehadiran');
+        return redirect()->route('user.kehadiran')->with('sucessedPulang', 'Terimakasih sudah melakukan absen pulang, Terimakasih sudah bekerja hari ini !');
     }
-
     public function pemantauanGaji()
     {
         $user = Auth::user();
@@ -143,7 +138,6 @@ class UserController extends Controller
                 $gajiPokok =  $group->count() * 120000;
                 $bayaranLembur =  $totalJamLembur  * 25000;
                 $potongan =  $potonganIzin +  $potonganAlfa;
-
                 return [
                     'totalData' => $group->count(),
                     'totalAlfa' => $totalAlfa,
@@ -160,7 +154,6 @@ class UserController extends Controller
 
         return view('auth.user.gaji', compact('user', 'hadirs'));
     }
-
     public function absensi()
     {
         $user = Auth::user();
@@ -196,42 +189,35 @@ class UserController extends Controller
 
         return view('auth.user.absensi', compact('user', 'monthsData'));
     }
-
     public function profile()
     {
         $user = Auth::user();
-
-        return view('auth.user.profile', compact('user'));
+        $qr = QrCode::generate($user->id);
+        return view('auth.user.profile', compact('user', 'qr'));
     }
-
     public function edit(User $user)
     {
+        if (Auth::user()->slug != $user->slug) {
+            return redirect()->back();
+        }
         return view('auth.user.edit', compact('user'));
     }
-
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'tanggalLahir' => ['required', 'date'],
-            'jeniskelamin' => ['required', Rule::in(['Laki - Laki', 'Perempuan'])],
-            'jabatan' => [
-                'required', Rule::in([
-                    'Direktur Utama',
-                    'Manajer Proyek',
-                    'Pengawas Lapangan',
-                    'Kepala Gudang',
-                    'Finance',
-                    'Purchasing',
-                    'Supervisor',
-                ]),
-            ],
-            'alamat' => 'required|string|max:255',
-        ]);
+        $validatedData = $request->validated();
+
+        $updated = false;
+        foreach ($validatedData as $key => $value) {
+            if ($user->{$key} != $value) {
+                $updated = true;
+                break;
+            }
+        }
+        if (!$updated) {
+            return redirect()->route('user.profile');
+        }
 
         $user->update($validatedData);
-
         return redirect()->route('user.profile')->with('updatedProfile', 'Kamu baru saja berhasil merubah data profile');
     }
 }
