@@ -23,11 +23,27 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $tanggalLahir = fake()->date();
+        $name = fake()->name();
+        $jeniskelamin = fake()->randomElement(['Laki - Laki', 'Perempuan']);
+        $jabatan = fake()->randomElement([
+            'Direktur Utama', 'Manajer Proyek', 'Pengawas Lapangan', 'Kepala Gudang', 'Finance', 'Purchasing', 'Supervisor',
+        ]);
+
+
         return [
-            'name' => fake()->name(),
+            'kode' => 'P' . rand(0, 999),
+            'name' => $name,
+            'slug' => Str::slug($name),
+            'jeniskelamin' => $jeniskelamin,
+            'jabatan' => $jabatan,
+            'alamat' => fake()->address(),
+            'tanggalLahir' => $tanggalLahir,
+
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'admin' => $this->faker->boolean(rand(0, 1)),
+
+            'password' => static::$password ??= Hash::make('123'),
             'remember_token' => Str::random(10),
         ];
     }
