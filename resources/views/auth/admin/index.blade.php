@@ -93,7 +93,7 @@
                 <tbody class="divide-y text-xs divide-slate-200">
                     @if ($users->count() == 0)
                         <tr>
-                            <td class="p-4 text-red-500 font-semibold text-center" colspan="4">Tidak ada
+                            <td class="pt-4 text-red-500 font-semibold text-center" colspan="4">Tidak ada
                                 Pegawai</td>
                         </tr>
                     @endif
