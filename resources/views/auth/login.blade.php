@@ -1,7 +1,8 @@
-<x-guest-layout>
+<x-guest-layout title="Login">
+
 
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 class=" text-center text-xl lg:text-2xl font-bold leading-9 tracking-tight text-gray-900">PT. Alpha Prime
+        <h2 class="text-center text-xl lg:text-2xl font-bold leading-9 tracking-tight text-gray-900">PT. Alpha Prime
             Creation
         </h2>
         <p class="text-xs text-center">
@@ -15,9 +16,8 @@
             <h2 class="text-center text-xl lg:text-2xl font-bold leading-9 tracking-tight text-gray-900 ">Login
             </h2>
             <x-input label="Email" name="email" type="email" autocomplete="email" value="{{ old('email') }}"
-                autofocus="true" />
-            <x-input label="Password" name="password" type="password" autocomplete="current-password" />
-
+                autofocus="true" class="w-full" />
+            <x-input label="Password" name="password" type="password" autocomplete="current-password" class="w-full" />
             <x-button id="submit" type="submit">Submit</x-button>
         </form>
     </div>

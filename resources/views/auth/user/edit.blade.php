@@ -38,6 +38,9 @@
                                     value="{{ old('name', $user->name) }}"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             </div>
+                            @error('name')
+                                <p class="text-xs text-red-500 ">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="sm:col-span-3">
@@ -48,6 +51,21 @@
                                     value="{{ old('email', $user->email) }}"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             </div>
+                            @error('email')
+                                <p class="text-xs text-red-500 ">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <label for="nik" class="block text-sm font-medium leading-6 text-gray-900">NIK</label>
+                            <div class="mt-2">
+                                <input type="number" name="nik" id="nik" required
+                                    value="{{ old('nik', $user->nik) }}" autocomplete="tanggalLahir"
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            </div>
+                            @error('nik')
+                                <p class="text-red-500 text-xs">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="sm:col-span-1">
@@ -58,6 +76,9 @@
                                     value="{{ old('tanggalLahir', $user->tanggalLahir) }}" autocomplete="tanggalLahir"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             </div>
+                            @error('tanggalLahir')
+                                <p class="text-xs text-red-500 ">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="sm:col-span-1">
@@ -77,9 +98,12 @@
                                 </select>
 
                             </div>
+                            @error('jeniskelamin')
+                                <p class="text-xs text-red-500 ">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <div class="sm:col-span-1 sm:col-start-3">
+                        <div class="sm:col-span-1 ">
 
                             <label for="country"
                                 class="block text-sm font-medium leading-6 text-gray-900">Jabatan</label>
@@ -106,7 +130,9 @@
                                     @endforeach
                                 </select>
                             </div>
-
+                            @error('jabatan')
+                                <p class="text-xs text-red-500 ">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="col-span-full">
@@ -117,8 +143,10 @@
                                     value="{{ old('alamat', $user->alamat) }}"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             </div>
+                            @error('alamat')
+                                <p class="text-xs text-red-500 ">{{ $message }}</p>
+                            @enderror
                         </div>
-
                     </div>
                 </div>
             </div>

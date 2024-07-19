@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Absensi">
     <x-slot name="navbar">
         @include('layouts.admin-navigation', ['admin' => $admin])
     </x-slot>
@@ -44,7 +44,8 @@
             {{ Carbon\Carbon::parse($date)->translatedFormat('l, j F Y') }}
         </h1>
 
-        <div class=" w-full overflow-auto rounded-xl ">
+
+        <div class="w-full overflow-auto rounded-xl ">
             <table class="w-full text-left text-xs text-slate-700 ">
                 <thead class="border-b border-slate-300 text-sm text-black ">
                     <tr>
@@ -58,8 +59,9 @@
                 <tbody class="divide-y divide-slate-300 ">
 
                     @if ($hadirs->count() == 0)
-                        <td class="pt-4 font-semibold text-red-500 text-center" colspan="5">Belum ada karyawan yang
-                            absen</td>
+                        <td class="pt-4 font-semibold text-red-500 text-center" colspan="5">
+                            Belum ada karyawan yang absen
+                        </td>
                     @endif
 
                     @foreach ($hadirs as $hadir)
@@ -67,7 +69,9 @@
                             <td class="p-4">
                                 <div class="flex w-max items-center gap-2">
                                     <div class="flex flex-col">
-                                        <span class="text-black ">{{ $hadir->user->name }}</span>
+                                        <span class="text-black ">
+                                            {{ $hadir->user->name }}
+                                        </span>
                                     </div>
                                 </div>
                             </td>
@@ -103,9 +107,12 @@
                             </td>
                         </tr>
                     @endforeach
+
                 </tbody>
             </table>
+
         </div>
+
 
     </div>
 

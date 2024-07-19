@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Auth;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Hadir;
+use Firebase\JWT\JWT;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rules\Password;
 
 class AdminController extends Controller
 {
@@ -22,6 +25,46 @@ class AdminController extends Controller
 
         return view('auth.admin.index', compact('admin', 'users'));
     }
+
+    public function profile()
+    {
+        $admin = auth()->user();
+        return view('auth.admin.profile', compact('admin'));
+    }
+
+    public function ubahNama(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'min:3|max:100|string',
+            'email' => 'min:12|max:50|email'
+        ]);
+        User::updateOrCreate(
+            ['admin' => 1],
+            ['name' => $validated['name'], 'email' => $validated['email']]
+        );
+        return redirect()->back()->with('nameUpdated', 'Berhasil merubah data');
+    }
+
+    public function ubahPassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required', 'min:3',
+            'password' => ['required', 'string', 'confirmed', 'min:3']
+        ]);
+
+        $user = auth()->user();
+
+        if (Hash::check($request->current_password, $user->password)) {
+            $user->update([
+                'password' => bcrypt($request->password)
+            ]);
+            return back()->with('passwordUpdated', 'Password berhasil diubah.');
+        } else {
+            return back()->withErrors(['current_password' => 'Password saat ini tidak sesuai.']);
+        }
+    }
+
+
 
     public function absensi()
     {
@@ -36,7 +79,18 @@ class AdminController extends Controller
     {
         $admin = auth()->user();
         $date = Carbon::now();
-        return view('auth.admin.qrCode', compact('admin', 'date'));
+        $users = User::where('admin', '!=', 1)->get();
+
+        foreach ($users as $user) {
+            $jwt_payload = [
+                'nik' => $user->nik,
+                'timeNow' => Carbon::parse($date)->translatedFormat('H:i:s'),
+                'dateNow' => Carbon::parse($date)->translatedFormat('l, j F Y')
+            ];
+            $jwt = JWT::encode($jwt_payload, 'secretKey', 'HS256');
+            $user->qr_code_jwt = $jwt;
+        }
+        return view('auth.admin.qrCode', compact('admin', 'date', 'users'));
     }
 
     public function userAbsensi(User $user)
@@ -123,9 +177,6 @@ class AdminController extends Controller
         $validated['alamat'] = ucwords($validated['alamat']);
         $validated['slug'] = Str::slug($validated['name']);
         $validated['password'] = Hash::make($validated['password']);
-        do {
-            $validated['kode'] = 'P' . rand(0, 9999);
-        } while (User::where('kode', $validated['kode'])->exists());
 
         User::create($validated);
 
@@ -144,15 +195,29 @@ class AdminController extends Controller
 
         return view('auth.admin.edit', compact('user', 'admin'));
     }
+
     public function update(UpdateUserRequest $request, User $user)
     {
 
         $validatedData = $request->validated();
+
         $validatedData['name'] = ucwords($validatedData['name']);
         $validatedData['alamat'] = ucwords($validatedData['alamat']);
+        $validatedData['slug'] = Str::slug($validatedData['name']);
 
-        $user->update($validatedData);
-        return redirect()->route('admin.show.user', $user->slug)->with('updatePegawai', 'Kamu baru saja memperbarui data pegawai');
+        $userData = User::findOrFail($user->id);
+
+        $changes = array_diff_assoc($validatedData, $userData->toArray());
+
+        if (!empty($changes)) {
+            $userData->update($validatedData);
+            $userSlug = $validatedData['slug'];
+
+            return redirect()->route('admin.show.user', $userSlug)
+                ->with('updatePegawai', 'Kamu baru saja memperbarui data pegawai');
+        }
+
+        return redirect()->route('admin.show.user', $user->slug);
     }
 
     public function destroy(User $user)

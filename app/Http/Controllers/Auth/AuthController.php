@@ -16,7 +16,10 @@ class AuthController extends Controller
 
     public function authentication(LoginRequest $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+            'password' => ['required'],
+        ]);
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $user = Auth::user();
@@ -27,8 +30,9 @@ class AuthController extends Controller
                 return redirect()->intended('/data-kehadiran');
             }
         }
-
-        return back();
+        return back()->withErrors([
+            'password' => 'Password Salah'
+        ]);
     }
 
     public function destroy(Request $request)

@@ -10,12 +10,12 @@
         </h1>
     </x-slot>
 
-    <div id="reader" class="flex items-center mb-4 mx-16"></div>
+    <div id="reader"></div>
 
     {{-- PESAN STATUS ALFA --}}
     @if ($showAlfaMessage)
         <div x-data="{ alertIsVisible: true }" x-show="alertIsVisible"
-            class="relative w-full overflow-hidden rounded-xl border border-amber-500 bg-white text-slate-700 "
+            class="relative w-full overflow-hidden rounded-xl border border-amber-500 bg-white text-slate-700 mt-6"
             role="alert" x-transition:leave="transition ease-in duration-300"
             x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90">
             <div class="flex w-full items-center gap-2 bg-amber-500/10 p-4">
@@ -42,14 +42,14 @@
     @endif
     {{-- PESAN IZIN --}}
     @if ($showIzinMessage)
-        <div class="p-4 mb-4 text-sm font-semibold bg-white rounded-md shadow-md" role="alert">
+        <div class="p-4 my-6 text-sm font-semibold bg-white rounded-md shadow-md" role="alert">
             Terimakasih sudah memberikan keterangan izin hari ini.
         </div>
     @endif
     {{-- SELESAI ABSEN --}}
     @if (session()->has('succesedAbsen'))
         <div x-data="{ alertIsVisible: true }" x-show="alertIsVisible"
-            class="relative w-full overflow-hidden rounded-md shadow-md border border-green-600 bg-white text-slate-700 "
+            class="relative w-full overflow-hidden rounded-md shadow-md border border-green-600 bg-white text-slate-700 mt-6"
             role="alert" x-transition:leave="transition ease-in duration-300"
             x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90">
             <div class="flex w-full items-center gap-2 bg-green-600/10 p-4">
@@ -78,7 +78,7 @@
     {{-- SELESAI PULANG --}}
     @if (session()->has('sucessedPulang'))
         <div x-data="{ alertIsVisible: true }" x-show="alertIsVisible"
-            class="relative w-full overflow-hidden rounded-md shadow-md border border-green-600 bg-white text-slate-700 "
+            class="relative w-full overflow-hidden rounded-md shadow-md border border-green-600 bg-white text-slate-700 mt-6"
             role="alert" x-transition:leave="transition ease-in duration-300"
             x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90">
             <div class="flex w-full items-center gap-2 bg-green-600/10 p-4">
@@ -94,6 +94,91 @@
                     <h3 class="text-sm font-semibold text-green-600">Berhasil Presensi</h3>
                     <p class="text-xs font-medium sm:text-sm">{{ session('sucessedPulang') }}
                     </p>
+                </div>
+                <button type="button" @click="alertIsVisible = false" class="ml-auto" aria-label="dismiss alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor"
+                        fill="none" stroke-width="2.5" class="w-4 h-4 shrink-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    @endif
+    {{-- GAGAL ABSEN --}}
+    @if (session()->has('absenFailed'))
+        <div x-data="{ alertIsVisible: true }" x-show="alertIsVisible"
+            class="relative w-full overflow-hidden rounded-md shadow-md border border-red-600 bg-white text-slate-700 mt-6"
+            role="alert" x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90">
+            <div class="flex w-full items-center gap-2 bg-red-600/10 p-4">
+                <div class="bg-red-600/15 text-red-600 rounded-full p-1" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-6"
+                        aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-2">
+                    <h3 class="text-sm font-semibold text-red-600">Gagal Melakukan Kehadiran</h3>
+                    <p class="text-xs font-medium sm:text-sm">{{ session('absenFailed') }}
+                    </p>
+                </div>
+                <button type="button" @click="alertIsVisible = false" class="ml-auto" aria-label="dismiss alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"
+                        stroke="currentColor" fill="none" stroke-width="2.5" class="w-4 h-4 shrink-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    @endif
+    {{-- GAGAL HADIR ULANG --}}
+    @if (session()->has('failedHadirAgain'))
+        <div x-data="{ alertIsVisible: true }" x-show="alertIsVisible"
+            class="relative w-full overflow-hidden shadow-md rounded-md border border-amber-500 bg-white text-slate-700 mt-6"
+            role="alert" x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90">
+            <div class="flex w-full items-center gap-2 bg-amber-500/10 p-4">
+                <div class="bg-amber-500/15 text-amber-500 rounded-full p-1" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-6"
+                        aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-2">
+                    <h3 class="text-sm font-semibold text-amber-500">Info Presensi</h3>
+                    <p class="text-xs font-medium sm:text-sm">{{ session('failedHadirAgain') }}</p>
+                </div>
+                <button type="button" @click="alertIsVisible = false" class="ml-auto" aria-label="dismiss alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"
+                        stroke="currentColor" fill="none" stroke-width="2.5" class="w-4 h-4 shrink-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    @endif
+    {{-- GAGAL PULANG ULANG --}}
+    @if (session()->has('failedPulangAgain'))
+        <div x-data="{ alertIsVisible: true }" x-show="alertIsVisible"
+            class="relative w-full overflow-hidden shadow-md rounded-md border border-amber-500 bg-white text-slate-700 mt-6"
+            role="alert" x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90">
+            <div class="flex w-full items-center gap-2 bg-amber-500/10 p-4">
+                <div class="bg-amber-500/15 text-amber-500 rounded-full p-1" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-6"
+                        aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-2">
+                    <h3 class="text-sm font-semibold text-amber-500">Info Presensi</h3>
+                    <p class="text-xs font-medium sm:text-sm">{{ session('failedPulangAgain') }}</p>
                 </div>
                 <button type="button" @click="alertIsVisible = false" class="ml-auto" aria-label="dismiss alert">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"
@@ -178,6 +263,7 @@
             {{ $absens->links() }}
         </div> --}}
     </div>
+
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script>
         function onScanSuccess(decodedText, decodedResult) {

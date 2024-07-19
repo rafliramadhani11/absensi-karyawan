@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateUserRequest;
-use App\Models\Hadir;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Hadir;
+use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\UpdateUserRequest;
+use Firebase\JWT\Key;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class UserController extends Controller
@@ -70,11 +72,22 @@ class UserController extends Controller
         );
         return redirect()->route('user.kehadiran');
     }
-    public function hadir()
+    public function hadir($jwt)
     {
         $user = auth()->user();
         $date = Carbon::now()->format('Y-m-d');
-        $waktuDatang = Carbon::now()->format('H:i:s');
+        $jwtDecoded = JWT::decode($jwt, new Key('secretKey', 'HS256'));
+
+        if ($jwtDecoded->nik != $user->nik) {
+            return back()->with('absenFailed', 'Gunakan Qr Code yang sesuai !');
+        }
+
+        foreach ($user->hadirs as $hadir) {
+            if ($hadir->waktu_datang && $hadir->created_at->format('Y-m-d') == $date) {
+                return back()->with('failedHadirAgain', 'Anda sudah melakukan kehadiran hari ini, tidak dapat melakukannya lagi.');
+            }
+        }
+
         Hadir::updateOrCreate(
             [
                 'user_id' => $user->id,
@@ -83,17 +96,29 @@ class UserController extends Controller
             [
                 'user_id' => $user->id,
                 'date' => $date,
-                'waktu_datang' => $waktuDatang,
+                'waktu_datang' => $jwtDecoded->timeNow,
                 'status' => 'Hadir'
             ]
         );
         return redirect()->route('user.kehadiran')->with('succesedAbsen', 'Terimakasih, sudah melakukan absen hari ini, Selamat Pagi !');
     }
-    public function pulang()
+
+    public function pulang($jwt)
     {
         $user = auth()->user();
         $date = Carbon::now()->format('Y-m-d');
-        $waktu_pulang = Carbon::now()->format('H:i:s');
+        $jwtDecoded = JWT::decode($jwt, new Key('secretKey', 'HS256'));
+
+        if ($jwtDecoded->nik != $user->nik) {
+            return back()->with('absenFailed', 'Gunakan Qr Code yang sesuai !');
+        }
+
+        foreach ($user->hadirs as $hadir) {
+            if ($hadir->waktu_pulang && $hadir->created_at->format('Y-m-d') == $date) {
+                return back()->with('failedPulangAgain', 'Anda sudah melakukan Pulang hari ini, tidak dapat melakukan nya lagi');
+            }
+        }
+
         Hadir::updateOrCreate(
             [
                 'user_id' => $user->id,
@@ -101,7 +126,7 @@ class UserController extends Controller
             ],
             [
                 'user_id' => $user->id,
-                'waktu_pulang' => $waktu_pulang,
+                'waktu_pulang' => $jwtDecoded->timeNow,
             ]
         );
         return redirect()->route('user.kehadiran')->with('sucessedPulang', 'Terimakasih sudah melakukan absen pulang, Terimakasih sudah bekerja hari ini !');

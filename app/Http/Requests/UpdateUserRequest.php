@@ -23,6 +23,8 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'nik' => ['integer', 'required', 'digits:16'],
+            'slug' => ['required'],
             'name' => ['required', 'string', 'max:50', 'min:3'],
             'email' => ['required', 'string', 'email', 'max:255', 'min:5'],
             'tanggalLahir' => ['required', 'string', 'date'],
@@ -45,6 +47,11 @@ class UpdateUserRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'nik:min' => 'NIK terlalu pendek minimal 16 angka',
+            'nik.digits' => 'NIK harus terdiri dari 16 digit',
+            'nik.required' => 'NIK tidak boleh kosong',
+            'nik.integer' => 'NIK harus berupa angka',
+
             'name.min' => 'Nama terlalu pendek',
             'name.required' => 'Nama tidak boleh kosong',
 

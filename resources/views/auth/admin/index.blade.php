@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Data Pegawai">
     <x-slot name="navbar">
         @include('layouts.admin-navigation', ['admin' => $admin])
     </x-slot>
@@ -84,7 +84,7 @@
             <table class="w-full text-left text-sm text-slate-700 ">
                 <thead class="border-b border-slate-300 text-sm text-gray-900 ">
                     <tr>
-                        <th scope="col" class="p-4">Kode Pegawai</th>
+                        <th scope="col" class="p-4">NIK</th>
                         <th scope="col" class="p-4">Nama Pegawai</th>
                         <th scope="col" class="p-4">Jenis Kelamin</th>
                         <th scope="col" class="p-4">Jabatan</th>
@@ -99,7 +99,7 @@
                     @endif
                     @foreach ($users as $user)
                         <tr>
-                            <td class="p-4 text-gray-900 font-semibold">{{ $user->kode }}</td>
+                            <td class="p-4 text-gray-900 font-semibold">{{ $user->nik }}</td>
                             <td class="p-4 text-gray-500">
                                 <span class="block">{{ $user->name }}</span>
                             </td>

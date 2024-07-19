@@ -10,12 +10,6 @@ Route::get('/', [AuthController::class, 'login'])->name('login')->middleware('Ch
 Route::post('/', [AuthController::class, 'authentication']);
 Route::post('logout', [AuthController::class, 'destroy'])->name('logout')->middleware('auth');
 
-/**
-Route::get('/hadir/{user:id}', function (User $user) {
-    dd($user);
-})->name('user.hadir');
- */
-
 Route::middleware(['auth', 'user'])->controller(UserController::class)->group(function () {
     Route::get('/profile', 'profile')->name('user.profile');
     Route::get('/profile/{user:slug}', 'edit')->name('user.edit');
@@ -26,13 +20,18 @@ Route::middleware(['auth', 'user'])->controller(UserController::class)->group(fu
     Route::get('/pemantauan-gaji', 'pemantauanGaji')->name('user.pemantauanGaji');
     Route::get('/data-absensi-pegawai', 'absensi')->name('user.absensi');
 
-    Route::get('/hadir', 'hadir')->name('user.hadir');
-    Route::get('/pulang', 'pulang')->name('user.pulang');
+    Route::get('/hadir/{jwt}', 'hadir')->name('user.hadir');
+    Route::get('/pulang/{jwt}', 'pulang')->name('user.pulang');
 
     Route::post('/izin', 'izinAction')->name('user.aksi.izin');
 });
 
 Route::middleware(['auth', 'admin'])->controller(AdminController::class)->group(function () {
+    Route::get('/profile/{user:slug}', 'profile')->name('admin.profile');
+    Route::patch('/ubah-nama', 'ubahNama')->name('admin.ubahNama');
+    Route::patch('ubah-password', 'ubahPassword')
+        ->name('admin.ubahPassword');
+
     Route::get('/data-pegawai', 'index')->name('admin.index');
     Route::get('/data-pegawai/add-pegawai', 'add')->name('admin.add.user');
     Route::get('/data-pegawai/info-pegawai/{user:slug}', 'show')->name('admin.show.user');

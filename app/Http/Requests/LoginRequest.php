@@ -23,7 +23,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email', 'exists:users,email'],
-            'password' => ['required'],
+            'password' => ['required', 'string']
         ];
     }
 
@@ -31,7 +31,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email.required' => 'Email harus di isi',
-            'email.exists' => 'Email tidak ditemukan!',
+            'email.exists' => 'Email tidak di temukan !',
             'password.required' => 'Password wajib diisi!',
         ];
     }

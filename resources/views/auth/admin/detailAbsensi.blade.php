@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Detail Absensi">
     <x-slot name="navbar">
         @include('layouts.admin-navigation', ['admin' => $admin])
     </x-slot>

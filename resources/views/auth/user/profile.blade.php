@@ -4,9 +4,13 @@
     </x-slot>
 
     <x-slot name="head">
-        <h1 class="text-xl font-bold tracking-tight text-gray-900">
-            Profile
-        </h1>
+        <ol class="flex flex-wrap items-center gap-2">
+            <li class="flex items-center gap-2">
+                <h1 class="text-xl font-bold tracking-tight text-gray-900">
+                    Profile
+                </h1>
+            </li>
+        </ol>
     </x-slot>
 
     {{-- BERHASIL UPDATE --}}
@@ -53,6 +57,10 @@
         </div>
 
         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Nomor Induk Kependudukan</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $user->nik }}</dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt class="text-sm font-medium leading-6 text-gray-900">Nama Pegawai</dt>
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $user->name }}</dd>
         </div>
@@ -85,8 +93,6 @@
                 {{ $user->tanggalLahir }}
             </dd>
         </div>
-
-
 
     </div>
 

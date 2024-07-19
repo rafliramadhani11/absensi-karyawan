@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Edit User">
     <x-slot name="navbar">
         @include('layouts.admin-navigation', ['admin' => $admin])
     </x-slot>
@@ -37,6 +37,8 @@
                 <div class="border-b border-gray-900/10 pb-12">
                     <h2 class="text-base font-semibold leading-7 text-gray-900">Ubah Data</h2>
 
+                    <input type="hidden" name="slug" value="{{ $user->slug }}">
+
                     <div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div class="sm:col-span-3">
                             <div class="flex justify-between items-center">
@@ -68,6 +70,19 @@
                                     value="{{ old('email', $user->email) }}"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             </div>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="nik" class="block text-sm font-medium leading-6 text-gray-900">Nomor Induk
+                                Kependudukan</label>
+                            <div class="mt-2">
+                                <input type="number" name="nik" id="nik" required
+                                    value="{{ old('nik', $user->nik) }}" autocomplete="nik"
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            </div>
+                            @error('nik')
+                                <p class="text-xs text-red-500 ">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="sm:col-span-1">
@@ -105,7 +120,7 @@
                             @enderror
                         </div>
 
-                        <div class="sm:col-span-1 sm:col-start-3">
+                        <div class="sm:col-span-1">
 
                             <label for="jabatan"
                                 class="block text-sm font-medium leading-6 text-gray-900">Jabatan</label>

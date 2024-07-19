@@ -31,13 +31,13 @@ class UserFactory extends Factory
 
 
         return [
-            'kode' => 'Admin',
+            'nik' => fake()->numerify('################'),
             'name' => 'Admin',
             'slug' => 'Admin',
-            'jeniskelamin' => $jeniskelamin,
+            'jeniskelamin' => 'Laki - Laki',
             'jabatan' => 'Kepala Gudang',
             'alamat' => 'Admin',
-            'tanggalLahir' => $tanggalLahir,
+            'tanggalLahir' => fake()->date(),
 
             'email' => 'admin@mail.com',
             'admin' => 1,
